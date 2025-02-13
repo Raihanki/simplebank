@@ -14,9 +14,35 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_USER: postgres
+          POSTGRES_DB: simplebank
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Checkout the code
       uses: actions/checkout@v4
+
+    - name: Install goose miration tool
+      run: |
+          curl --output install.sh https://raw.githubusercontent.com/pressly/goose/master/install.sh
+          sudo GOOSE_INSTALL=/usr sh install.sh
+          which goose
+
+    - name: Run miration
+      run: make migrateup
 
     - name: Set up Go
       uses: actions/setup-go@v4
