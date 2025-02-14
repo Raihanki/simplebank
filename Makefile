@@ -16,4 +16,7 @@ migratedown:
 sqlc:
 	sqlc generate
 
-.PHONY: createdb dropdb docker-postgres migrateup migratedown sqlc
+server:
+	go run main.go
+
+.PHONY: createdb dropdb docker-postgres migrateup migratedown sqlc server
