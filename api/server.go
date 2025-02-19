@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	db "github.com/raihanki/simplebank/db/sqlc"
+	"github.com/raihanki/simplebank/token"
+	"github.com/raihanki/simplebank/util"
 )
 
 // Server serves HTTP requests for our banking service.
@@ -13,7 +15,7 @@ type Server struct {
 	router *gin.Engine
 }
 
-func NewServer(store db.Store) *Server {
+func NewServer(store db.Store) (*Server, error) {
 	server := &Server{store: store}
 	router := gin.Default()
 

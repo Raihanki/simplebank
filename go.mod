@@ -3,9 +3,11 @@ module github.com/raihanki/simplebank
 go 1.23.5
 
 require (
+	aidanwoods.dev/go-paseto v1.5.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/golang/mock v1.6.0
+	github.com/google/uuid v1.4.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
@@ -13,6 +15,7 @@ require (
 )
 
 require (
+	aidanwoods.dev/go-result v0.1.0 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
