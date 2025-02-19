@@ -11,18 +11,27 @@ import (
 
 // Server serves HTTP requests for our banking service.
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	store      db.Store
+	tokenMaker token.Maker
+	router     *gin.Engine
+	config     util.Config
 }
 
-func NewServer(store db.Store) (*Server, error) {
+func NewServer(config util.Config, store db.Store) (*Server, error) {
 	server := &Server{store: store}
+
+	tokenMaker, err := token.NewPasetoMaker(config.TokenKey)
+	if err != nil {
+		return nil, err
+	}
+
 	router := gin.Default()
 
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validCurrency)
 	}
 
+	router.POST("/users/login", server.login)
 	router.POST("/users", server.createUser)
 
 	router.POST("/accounts", server.createAccount)
@@ -32,7 +41,10 @@ func NewServer(store db.Store) (*Server, error) {
 	router.POST("/transfers", server.createTransfer)
 
 	server.router = router
-	return server
+	server.tokenMaker = tokenMaker
+	server.config = config
+
+	return server, nil
 }
 
 func (server *Server) Start(address string) error {
